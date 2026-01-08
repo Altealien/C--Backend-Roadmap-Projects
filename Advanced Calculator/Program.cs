@@ -1,23 +1,44 @@
-//Performs Basic Arithmetic Operations(+,-,*,/)
 //Advanced operations like(Power, Square Root, Percentage)
 
 /*For the operations set limitations to how they can be performed
-i.e Let the user know that it's(+,-,/,*, ^- for power ¬ for squar root and % for percentage*/
-
-//Stores calculation history(last 5 calculations(could be just the result alone or the actual calculation))
+i.e Let the user know that it's(+,-,/,*, ^- for power ¬ for square root and % for percentage*/
+//Use split the string to separate the input, ensure the user properly spaces them out
+//e.g 10 + 30 
 //Handles division by zero(exception handling)
 //Validates user input(ensures user is entering digits. Scope: ints, floats, doubles, long)
-//Allows continuous calculation till user exits- Done
+//Allows continuous calculation till user exits
 
 // Create methods for all arithmetic operations
+
+// 
+using System.Data;
+
+
+
+
+Queue<double?> calculationHistory = []; ;
+
 CalculatorDisplay();
 
+double PerfomCalculations()
+{
+    Console.Write("Enter expression(e.g 10 + 10): ");
+    string expression = Console.ReadLine() ?? string.Empty;
+    object result = new DataTable().Compute(expression, null);
+    double calculationResult = Convert.ToDouble(result);
+    if (calculationHistory.Count < 5)
+    {
+        calculationHistory.Enqueue(calculationResult);
+    }
+    else
+    {
+        calculationHistory.Dequeue();
+        calculationHistory.Enqueue(calculationResult);
+    }
 
+    return calculationResult;
 
-
-
-
-
+}
 
 void CalculatorDisplay()
 {
@@ -34,12 +55,19 @@ void CalculatorDisplay()
                 {
                     case "1":
                         //Perform Calculations
-                        Console.WriteLine("Performing calculations...");
+                        Console.WriteLine("Performing calculations...\nSeparate each value with space.");
+                        Console.WriteLine(PerfomCalculations());
                         Console.WriteLine();
                         break;
                     case "2":
                         //View Calculation History
-                        Console.WriteLine("Showing calculation history");
+                        Console.WriteLine("Showing calculation history(last 5 results)");
+                        double?[] itemsArray = calculationHistory.ToArray();
+                        Array.Reverse(itemsArray);
+                        foreach (var item in itemsArray)
+                        {
+                            Console.WriteLine(item);
+                        }
                         Console.WriteLine();
                         break;
                     case "3":
